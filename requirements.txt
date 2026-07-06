@@ -1,7 +1,42 @@
 numpy
-pandas
-matplotlib
 scipy
-pyproj
-rasterio
-tqdm
+matplotlib
+pandas
+xarray
+harmonica
+verde
+boule
+
+# ============================
+# Core scientific libraries
+# ============================
+numpy>=1.26
+scipy>=1.11
+pandas>=2.2
+matplotlib>=3.9
+
+# ============================
+# Geospatial data
+# ============================
+xarray>=2024.1
+rioxarray>=0.15
+rasterio>=1.3
+pyproj>=3.6
+
+# ============================
+# Gravity and geophysics
+# ============================
+harmonica>=0.7
+verde>=1.8
+boule>=0.4
+
+# ============================
+# Interactive notebooks
+# ============================
+jupyter
+ipykernel
+
+# ============================
+# Testing
+# ============================
+pytest
