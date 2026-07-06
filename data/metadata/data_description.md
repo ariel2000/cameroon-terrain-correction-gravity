@@ -12,7 +12,7 @@ Comparative study of terrain correction methods applied to gravity anomalies.
 
 The project uses two complementary datasets.
 
-## 1. données orig1.dat
+## 1. original_stations.xlsx
 
 ### Description
 
@@ -32,13 +32,13 @@ These stations constitute the reference dataset for all numerical comparisons.
 
 ---
 
-## 2. out1.dat
+## 2. kriged_grid_surfer.dat
 
 ### Description
 
 This file represents the complete study area as a regular grid.
 
-The grid was generated from the original observation points (`données orig1.dat`) using **Ordinary Kriging** in **Golden Software Surfer**.
+The grid was generated from the original observation points (`original_stations.xlsx`) using **Ordinary Kriging** in **Golden Software Surfer**.
 
 The interpolation was performed exclusively for visualization and spatial representation purposes.
 
@@ -53,7 +53,7 @@ The interpolation was performed exclusively for visualization and spatial repres
 
 The interpolated grid **is not used as the reference dataset for numerical comparisons**.
 
-All terrain correction computations are performed only at the **1991 original observation stations** contained in `données orig1.dat`.
+All terrain correction computations are performed only at the **1991 original observation stations** contained in `original_stations.xlsx`.
 
 ---
 
@@ -61,11 +61,11 @@ All terrain correction computations are performed only at the **1991 original ob
 
 Original field stations
 ↓
-données orig1.dat (1991 stations)
+original_stations.xlsx (1991 stations)
 ↓
 Ordinary Kriging (Surfer)
 ↓
-out1.dat (continuous grid)
+original_stations.xlsx (continuous grid)
 ↓
 Maps and visualization
 
