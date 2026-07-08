@@ -99,6 +99,14 @@ cameroon-terrain-correction-gravity/
 └── requirements.txt
 ```
 
+## Data
+
+The input data are stored in:
+
+```text
+data/raw/
+
+
 ## Programming Language
 
 - Python
