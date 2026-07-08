@@ -42,6 +42,26 @@ The grid was generated from the original observation points (`original_stations.
 
 The interpolation was performed exclusively for visualization and spatial representation purposes.
 
+This file is the gridded representation of the study area.
+
+It was obtained by kriging in Surfer from the original station data.
+
+It is used to represent the whole area and to locate each station inside the regional terrain grid before extracting the surrounding topography.
+
+## original_stations.xlsx
+
+This file contains the 1991 original gravity stations.
+
+Columns:
+
+- Longitude: in degrees
+- Latitude: in degrees
+- Altitude: in meters
+- A(air libre): free-air anomaly, probably in mGal
+
+These points are the real computation points where terrain corrections will be calculated.
+
+
 ### Purpose
 
 - visualization of the entire study area;
