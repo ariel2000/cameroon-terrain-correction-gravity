@@ -1,11 +1,17 @@
 numpy
 scipy
-matplotlib
 pandas
+matplotlib
 xarray
+rasterio
+pyproj
 harmonica
 verde
 boule
+openpyxl
+jupyter
+ipykernel
+pytest
 
 # ============================
 # Core scientific libraries
