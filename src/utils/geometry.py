@@ -1,50 +1,60 @@
+"""
+Geometry utilities for terrain correction calculations.
+
+This module builds station-to-terrain geometry using the coordinate
+conversion functions already validated in coordinates.py.
+"""
+
+from __future__ import annotations
+
 import numpy as np
 
-EARTH_RADIUS_M = 6371008.8
+from src.utils.coordinates import degrees_to_local_meters
 
 
-def local_distances(lon_grid, lat_grid, lon_station, lat_station):
+def local_distances(
+    lon_grid,
+    lat_grid,
+    lon_station,
+    lat_station,
+):
     """
-    Compute local horizontal distances between a gravity station
+    Compute horizontal local distances between a gravity station
     and terrain-grid nodes.
 
     Parameters
     ----------
     lon_grid : array_like
-        Grid longitudes in degrees.
+        Grid longitudes in decimal degrees.
+
     lat_grid : array_like
-        Grid latitudes in degrees.
+        Grid latitudes in decimal degrees.
+
     lon_station : float
-        Station longitude in degrees.
+        Station longitude in decimal degrees.
+
     lat_station : float
-        Station latitude in degrees.
+        Station latitude in decimal degrees.
 
     Returns
     -------
-    dx : ndarray
-        East-West distances from station, in meters.
-    dy : ndarray
-        North-South distances from station, in meters.
-    r : ndarray
-        Horizontal radial distances from station, in meters.
+    dx_m : ndarray
+        East-west offsets relative to the station, in meters.
+
+    dy_m : ndarray
+        North-south offsets relative to the station, in meters.
+
+    r_m : ndarray
+        Horizontal radial distance from the station, in meters.
     """
 
-    lon_grid = np.asarray(lon_grid, dtype=float)
-    lat_grid = np.asarray(lat_grid, dtype=float)
-
-    lat0 = np.deg2rad(lat_station)
-
-    dx = (
-        EARTH_RADIUS_M
-        * np.cos(lat0)
-        * np.deg2rad(lon_grid - lon_station)
+    dx_m, dy_m = degrees_to_local_meters(
+        longitude=lon_grid,
+        latitude=lat_grid,
+        reference_longitude=lon_station,
+        reference_latitude=lat_station,
     )
 
-    dy = (
-        EARTH_RADIUS_M
-        * np.deg2rad(lat_grid - lat_station)
-    )
+    r_m = np.hypot(dx_m, dy_m)
 
-    r = np.sqrt(dx**2 + dy**2)
-
-    return dx, dy, r
+    return dx_m, dy_m, r_m
