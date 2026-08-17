@@ -115,3 +115,257 @@ def test_requires_two_dimensional_array():
             relative_elevation=relative,
             station_index=(0, 0),
         )
+from src.utils.station_centered_grid import (
+    build_station_centered_grid,
+)
+
+
+def make_simple_geographic_grid():
+    x = np.linspace(9.0, 9.1, 11)
+    y = np.linspace(4.0, 4.1, 11)
+
+    xx, yy = np.meshgrid(x, y)
+
+    # Simple planar synthetic terrain
+    z = (
+        100.0
+        + 10.0 * (xx - 9.0)
+        + 20.0 * (yy - 4.0)
+    )
+
+    return {
+        "x": x,
+        "y": y,
+        "z": z,
+    }
+
+
+def test_station_is_exactly_centered():
+    grid = make_simple_geographic_grid()
+
+    local = build_station_centered_grid(
+        grid=grid,
+        station_longitude=9.05,
+        station_latitude=4.05,
+        station_elevation_m=150.0,
+        radius_m=1000.0,
+        spacing_m=250.0,
+    )
+
+    iy, ix = local["station_index"]
+
+    assert np.isclose(
+        local["x_mesh_m"][iy, ix],
+        0.0,
+    )
+
+    assert np.isclose(
+        local["y_mesh_m"][iy, ix],
+        0.0,
+    )
+
+
+def test_station_elevation_is_enforced():
+    grid = make_simple_geographic_grid()
+
+    local = build_station_centered_grid(
+        grid=grid,
+        station_longitude=9.05,
+        station_latitude=4.05,
+        station_elevation_m=150.0,
+        radius_m=1000.0,
+        spacing_m=250.0,
+    )
+
+    idx = local["station_index"]
+
+    assert np.isclose(
+        local["elevation_m"][idx],
+        150.0,
+    )
+
+    assert np.isclose(
+        local["relative_elevation_m"][idx],
+        0.0,
+    )
+
+
+def test_local_grid_is_symmetric():
+    grid = make_simple_geographic_grid()
+
+    local = build_station_centered_grid(
+        grid=grid,
+        station_longitude=9.05,
+        station_latitude=4.05,
+        station_elevation_m=150.0,
+        radius_m=1000.0,
+        spacing_m=250.0,
+    )
+
+    assert np.isclose(
+        local["x_m"][0],
+        -local["x_m"][-1],
+    )
+
+    assert np.isclose(
+        local["y_m"][0],
+        -local["y_m"][-1],
+    )
+
+
+def test_expected_local_grid_size():
+    grid = make_simple_geographic_grid()
+
+    local = build_station_centered_grid(
+        grid=grid,
+        station_longitude=9.05,
+        station_latitude=4.05,
+        station_elevation_m=150.0,
+        radius_m=1000.0,
+        spacing_m=250.0,
+    )
+
+    # -1000 ... 0 ... +1000 every 250 m
+    # gives 9 nodes in each direction
+    assert local["elevation_m"].shape == (9, 9)
+
+
+def test_invalid_local_grid_parameters():
+    grid = make_simple_geographic_grid()
+
+    with pytest.raises(ValueError):
+        build_station_centered_grid(
+            grid=grid,
+            station_longitude=9.05,
+            station_latitude=4.05,
+            station_elevation_m=150.0,
+            radius_m=1000.0,
+            spacing_m=-100.0,
+        )
+        from src.utils.station_centered_grid import (
+    build_station_centered_grid,
+)
+
+
+def make_simple_geographic_grid():
+    x = np.linspace(9.0, 9.1, 11)
+    y = np.linspace(4.0, 4.1, 11)
+
+    xx, yy = np.meshgrid(x, y)
+
+    # Simple planar synthetic terrain
+    z = (
+        100.0
+        + 10.0 * (xx - 9.0)
+        + 20.0 * (yy - 4.0)
+    )
+
+    return {
+        "x": x,
+        "y": y,
+        "z": z,
+    }
+
+
+def test_station_is_exactly_centered():
+    grid = make_simple_geographic_grid()
+
+    local = build_station_centered_grid(
+        grid=grid,
+        station_longitude=9.05,
+        station_latitude=4.05,
+        station_elevation_m=150.0,
+        radius_m=1000.0,
+        spacing_m=250.0,
+    )
+
+    iy, ix = local["station_index"]
+
+    assert np.isclose(
+        local["x_mesh_m"][iy, ix],
+        0.0,
+    )
+
+    assert np.isclose(
+        local["y_mesh_m"][iy, ix],
+        0.0,
+    )
+
+
+def test_station_elevation_is_enforced():
+    grid = make_simple_geographic_grid()
+
+    local = build_station_centered_grid(
+        grid=grid,
+        station_longitude=9.05,
+        station_latitude=4.05,
+        station_elevation_m=150.0,
+        radius_m=1000.0,
+        spacing_m=250.0,
+    )
+
+    idx = local["station_index"]
+
+    assert np.isclose(
+        local["elevation_m"][idx],
+        150.0,
+    )
+
+    assert np.isclose(
+        local["relative_elevation_m"][idx],
+        0.0,
+    )
+
+
+def test_local_grid_is_symmetric():
+    grid = make_simple_geographic_grid()
+
+    local = build_station_centered_grid(
+        grid=grid,
+        station_longitude=9.05,
+        station_latitude=4.05,
+        station_elevation_m=150.0,
+        radius_m=1000.0,
+        spacing_m=250.0,
+    )
+
+    assert np.isclose(
+        local["x_m"][0],
+        -local["x_m"][-1],
+    )
+
+    assert np.isclose(
+        local["y_m"][0],
+        -local["y_m"][-1],
+    )
+
+
+def test_expected_local_grid_size():
+    grid = make_simple_geographic_grid()
+
+    local = build_station_centered_grid(
+        grid=grid,
+        station_longitude=9.05,
+        station_latitude=4.05,
+        station_elevation_m=150.0,
+        radius_m=1000.0,
+        spacing_m=250.0,
+    )
+
+    # -1000 ... 0 ... +1000 every 250 m
+    # gives 9 nodes in each direction
+    assert local["elevation_m"].shape == (9, 9)
+
+
+def test_invalid_local_grid_parameters():
+    grid = make_simple_geographic_grid()
+
+    with pytest.raises(ValueError):
+        build_station_centered_grid(
+            grid=grid,
+            station_longitude=9.05,
+            station_latitude=4.05,
+            station_elevation_m=150.0,
+            radius_m=1000.0,
+            spacing_m=-100.0,
+        )
