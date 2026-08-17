@@ -127,3 +127,67 @@ def distance_3d_m(
     dz_m = elevation_m - float(reference_elevation_m)
 
     return np.sqrt(x_m**2 + y_m**2 + dz_m**2)
+
+def local_meters_to_degrees(
+    x_m: float | np.ndarray,
+    y_m: float | np.ndarray,
+    reference_longitude: float,
+    reference_latitude: float,
+) -> tuple[np.ndarray, np.ndarray]:
+    """
+    Convert local Cartesian offsets in meters back to
+    longitude and latitude.
+
+    This is the inverse transformation of
+    degrees_to_local_meters() under the same local
+    spherical-Earth approximation.
+
+    Parameters
+    ----------
+    x_m : float or ndarray
+        East-west offset(s) in meters.
+
+    y_m : float or ndarray
+        North-south offset(s) in meters.
+
+    reference_longitude : float
+        Longitude of the local origin in decimal degrees.
+
+    reference_latitude : float
+        Latitude of the local origin in decimal degrees.
+
+    Returns
+    -------
+    longitude, latitude : ndarray
+        Geographic coordinates in decimal degrees.
+    """
+
+    x_m = np.asarray(x_m, dtype=float)
+    y_m = np.asarray(y_m, dtype=float)
+
+    lat0_rad = np.deg2rad(reference_latitude)
+
+    cos_lat0 = np.cos(lat0_rad)
+
+    if np.isclose(cos_lat0, 0.0):
+        raise ValueError(
+            "Local longitude conversion is undefined at the poles."
+        )
+
+    dlon_rad = x_m / (
+        EARTH_RADIUS_M * cos_lat0
+    )
+
+    dlat_rad = y_m / EARTH_RADIUS_M
+
+    longitude = (
+        float(reference_longitude)
+        + np.rad2deg(dlon_rad)
+    )
+
+    latitude = (
+        float(reference_latitude)
+        + np.rad2deg(dlat_rad)
+    )
+
+    return longitude, latitude
